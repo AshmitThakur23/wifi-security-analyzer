@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ WiFi Security Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 15s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .connection-indicator {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin-top: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .connection-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        .connected {
+            background: #28a745;
+        }
+        
+        .disconnected {
+            background: #dc3545;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .status-box {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .status-safe {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+        
+        .status-danger {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .network-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .network-info strong {
+            color: #667eea;
+        }
+        
+        .issue-list {
+            list-style: none;
+            padding: 10px 0;
+        }
+        
+        .issue-list li {
+            padding: 8px;
+            margin: 5px 0;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+        }
+        
+        .device-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .device-suspicious {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        #result {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .available-network {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #ccc;
+        }
+        
+        .network-secure {
+            border-left-color: #28a745;
+        }
+        
+        .network-insecure {
+            border-left-color: #dc3545;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .badge-safe {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge-unsafe {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideInRight 0.5s ease, slideOutRight 0.5s ease 3s forwards;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ WiFi Security Analyzer</h1>
+            <p class="subtitle">Protect yourself from WiFi hackers & monitor your network</p>
+            <div class="connection-indicator">
+                <span class="connection-dot connected" id="connectionDot"></span>
+                <span id="connectionStatus">Checking connection...</span>
+            </div>
+        </header>
+        
+        <div class="feature-grid">
+            <!-- Feature 1: Check Current WiFi -->
+            <div class="card">
+                <h2>🔍 Feature 1: Check Current WiFi</h2>
+                <p>Check if the WiFi you're connected to is safe from hackers</p>
+                <button class="btn" onclick="checkCurrentWiFi()">🔍 Check My WiFi Now</button>
+                <button class="btn btn-success" onclick="scanAvailableNetworks()">📡 Scan Available Networks</button>
+                <div id="wifiCheckResult"></div>
+            </div>
+            
+            <!-- Feature 2: Monitor Home Network -->
+            <div class="card">
+                <h2>👁️ Feature 2: Monitor My Network</h2>
+                <p>Detect unauthorized devices and suspicious activity on your WiFi</p>
+                
+                <!-- 24/7 Monitoring Controls -->
+                <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <h3 style="margin: 0 0 10px 0; color: #667eea;">⏱️ 24/7 Continuous Monitoring</h3>
+                    <p style="margin: 5px 0; font-size: 0.9em;">Monitor ANY WiFi network continuously - at home, office, or anywhere!</p>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn btn-success" id="startMonitorBtn" onclick="startContinuousMonitoring()">
+                            ▶️ START Monitoring
+                        </button>
+                        <button class="btn btn-danger" id="stopMonitorBtn" onclick="stopContinuousMonitoring()" style="display: none;">
+                            ⏸️ STOP Monitoring
+                        </button>
+                    </div>
+                    <div id="monitorStatus" style="margin-top: 10px;"></div>
+                </div>
+                
+                <!-- One-time Scans -->
+                <div style="margin-top: 10px;">
+                    <button class="btn" onclick="scanMyNetwork()">🔎 Quick Scan Now</button>
+                    <button class="btn btn-success" onclick="viewDevices()">📱 View All Devices</button>
+                    <button class="btn" onclick="viewHistory()">📊 View History</button>
+                    <button class="btn" onclick="viewWeeklyReport()">📅 Weekly Report</button>
+                    <button class="btn btn-danger" onclick="viewAlerts()">🚨 View Alerts</button>
+                </div>
+                
+                <div id="monitorResult"></div>
+            </div>
+        </div>
+        
+        <!-- Results Display -->
+        <div class="card" id="resultsCard" style="display: none;">
+            <h2>📊 Results</h2>
+            <div id="mainResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:5000/api';
+        const API_TOKEN = 'mysecrettoken'; // In production, use secure authentication
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_TOKEN}`
+        };
+        
+        // Check monitoring status on page load
+        window.addEventListener('load', function() {
+            checkMonitoringStatus();
+            checkCurrentWiFiStatus();
+            
+            // Auto-refresh status every 30 seconds
+            setInterval(checkCurrentWiFiStatus, 30000);
+        });
+        
+        async function checkCurrentWiFiStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/connection/status`, {
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
+                });
+                
+                const data = await response.json();
+                const statusEl = document.getElementById('connectionStatus');
+                const dotEl = document.getElementById('connectionDot');
+                
+                if (data.connected) {
+                    statusEl.textContent = `Connected to: ${data.ssid || 'WiFi Network'}`;
+                    dotEl.className = 'connection-dot connected';
+                } else {
+                    statusEl.textContent = 'Not connected to WiFi';
+                    dotEl.className = 'connection-dot disconnected';
+                }
+            } catch (error) {
+                document.getElementById('connectionStatus').textContent = 'Server not connected';
+                document.getElementById('connectionDot').className = 'connection-dot disconnected';
+            }
+        }
+        
+        function showLoading(elementId) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = '<div class="loading"><div class="spinner"></div><p>Please wait...</p></div>';
+        }
+        
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="status-box status-danger">❌ Error: ${message}</div>`;
+        }
+        
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            toast.innerHTML = `<strong>${icon} ${message}</strong>`;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3500);
+        }
+        
+        // ============================================
+        // 24/7 CONTINUOUS MONITORING FUNCTIONS
+        // ============================================
+        
+        async function startContinuousMonitoring() {
+            try {
+                const checkInterval = 300; // 5 minutes
+                
+                const response = await fetch(`${API_BASE}/monitoring/continuous/start`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ check_interval: checkInterval })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('startMonitorBtn').style.display = 'none';
+                    document.getElementById('stopMonitorBtn').style.display = 'inline-block';
+                    
+                    document.getElementById('monitorStatus').innerHTML = `
+                        <div class="status-box status-safe">
+                            <strong>✅ Monitoring ACTIVE</strong><br>
+                            Checking every ${checkInterval / 60} minutes<br>
+                            <small>Started: ${new Date(data.started_at).toLocaleString()}</small>
+                        </div>
+                    `;
+                    
+                    showToast('24/7 Monitoring Started! You are now protected.', 'success');
+                } else {
+                    showToast('Failed to start monitoring: ' + data.message, 'error');
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        async function stopContinuousMonitoring() {
+            if (!confirm('Are you sure you want to STOP 24/7 monitoring?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/continuous/stop`, {
+                    method: 'POST',
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('startMonitorBtn').style.display = 'inline-block';
+                    document.getElementById('stopMonitorBtn').style.display = 'none';
+                    
+                    document.getElementById('monitorStatus').innerHTML = `
+                        <div class="status-box status-warning">
+                            <strong>⏸️ Monitoring STOPPED</strong><br>
+                            Total scans performed: ${data.total_scans}
+                        </div>
+                    `;
+                    
+                    showToast('Monitoring Stopped', 'warning');
+                } else {
+                    showToast('Failed to stop monitoring: ' + data.message, 'error');
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        async function checkMonitoringStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/continuous/status`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.is_running) {
+                    document.getElementById('startMonitorBtn').style.display = 'none';
+                    document.getElementById('stopMonitorBtn').style.display = 'inline-block';
+                    
+                    document.getElementById('monitorStatus').innerHTML = `
+                        <div class="status-box status-safe">
+                            <strong>✅ Monitoring ACTIVE</strong><br>
+                            Checking every ${data.check_interval_minutes} minutes<br>
+                            Total scans: ${data.total_scans}<br>
+                            Unread alerts: ${data.unread_alerts}
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('startMonitorBtn').style.display = 'inline-block';
+                    document.getElementById('stopMonitorBtn').style.display = 'none';
+                    
+                    document.getElementById('monitorStatus').innerHTML = `
+                        <div class="status-box status-warning">
+                            <strong>⏸️ Monitoring is OFF</strong><br>
+                            Click START to begin 24/7 monitoring
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error checking status:', error);
+            }
+        }
+        
+        async function viewHistory() {
+            showLoading('monitorResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const days = prompt('How many days of history? (1-30)', '7');
+                if (!days) return;
+                
+                const response = await fetch(`${API_BASE}/monitoring/continuous/history?days=${days}`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                displayHistory(data);
+            } catch (error) {
+                showError('monitorResult', error.message);
+            }
+        }
+        
+        function displayHistory(data) {
+            const resultEl = document.getElementById('monitorResult');
+            const mainEl = document.getElementById('mainResults');
+            
+            let html = `
+                <h3>📊 Monitoring History: ${data.period}</h3>
+                <div class="network-info">
+                    <h4>Statistics</h4>
+                    <p><strong>Total Scans:</strong> ${data.statistics.total_scans}</p>
+                    <p><strong>Unique Devices Seen:</strong> ${data.statistics.unique_devices}</p>
+                    <p><strong>Scans with Suspicious Activity:</strong> ${data.statistics.scans_with_suspicious_activity}</p>
+                    <p><strong>Total Alerts:</strong> ${data.statistics.total_alerts}</p>
+                </div>
+            `;
+            
+            if (data.scans && data.scans.length > 0) {
+                html += '<h4>Recent Scans:</h4>';
+                data.scans.slice(0, 10).forEach(scan => {
+                    const statusClass = scan.risk_score >= 60 ? 'status-danger' : 
+                                       scan.risk_score >= 30 ? 'status-warning' : 'status-safe';
+                    
+                    html += `
+                        <div class="status-box ${statusClass}" style="margin: 10px 0;">
+                            <strong>${new Date(scan.timestamp).toLocaleString()}</strong><br>
+                            Network: ${scan.wifi_ssid}<br>
+                            Devices: ${scan.total_devices} | Suspicious: ${scan.suspicious_devices} | Risk: ${scan.risk_score}/100
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p>No scan history found for this period.</p>';
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ History loaded!</p>';
+        }
+        
+        async function viewWeeklyReport() {
+            showLoading('monitorResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/continuous/weekly-report`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayHistory(data.report);
+                } else {
+                    showError('monitorResult', data.message || 'No report available');
+                }
+            } catch (error) {
+                showError('monitorResult', error.message);
+            }
+        }
+        
+        async function viewAlerts() {
+            showLoading('monitorResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/continuous/alerts`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                displayAlerts(data.alerts);
+            } catch (error) {
+                showError('monitorResult', error.message);
+            }
+        }
+        
+        function displayAlerts(alerts) {
+            const resultEl = document.getElementById('monitorResult');
+            const mainEl = document.getElementById('mainResults');
+            
+            let html = `<h3>🚨 Security Alerts (${alerts.length})</h3>`;
+            
+            if (alerts.length === 0) {
+                html += '<p>No alerts! Your network appears secure. ✅</p>';
+            } else {
+                alerts.forEach(alert => {
+                    const severityClass = alert.severity === 'critical' ? 'status-danger' :
+                                         alert.severity === 'high' ? 'status-warning' : 'status-box';
+                    
+                    html += `
+                        <div class="${severityClass}" style="margin: 10px 0;">
+                            <strong>${alert.title}</strong><br>
+                            <small>${new Date(alert.timestamp).toLocaleString()}</small><br>
+                            Severity: ${alert.severity.toUpperCase()} | Risk: ${alert.risk_score}/100<br>
+                            <pre style="white-space: pre-wrap; margin-top: 10px;">${alert.message}</pre>
+                        </div>
+                    `;
+                });
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ Alerts loaded!</p>';
+        }
+        
+        // ============================================
+        // FEATURE 1: WiFi CONNECTION CHECK
+        // ============================================
+        
+        async function checkCurrentWiFi() {
+            showLoading('wifiCheckResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            showToast('Analyzing your WiFi security...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/connection/check`, {
+                    method: 'POST',
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showError('wifiCheckResult', data.error || 'Check failed');
+                    showToast(data.error || 'Check failed', 'error');
+                    return;
+                }
+                
+                displayWiFiCheckResults(data);
+                
+                if (data.is_safe) {
+                    showToast('WiFi is SAFE! ✅', 'success');
+                } else {
+                    showToast('WARNING: WiFi may be unsafe! 🔴', 'warning');
+                }
+            } catch (error) {
+                showError('wifiCheckResult', error.message);
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+        
+        function displayWiFiCheckResults(data) {
+            const resultEl = document.getElementById('wifiCheckResult');
+            const mainEl = document.getElementById('mainResults');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            const statusClass = data.is_safe ? 'status-safe' : 'status-danger';
+            
+            let html = `
+                <div class="status-box ${statusClass}" style="margin-top: 15px;">
+                    <h3>${data.verdict}</h3>
+                    <p><strong>Risk Score:</strong> ${data.risk_score}/100</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${data.risk_score}%; background: ${data.risk_score >= 60 ? 'linear-gradient(90deg, #dc3545 0%, #f12711 100%)' : data.risk_score >= 30 ? 'linear-gradient(90deg, #ffc107 0%, #ff9800 100%)' : 'linear-gradient(90deg, #28a745 0%, #20c997 100%)'}"></div>
+                    </div>
+                    <p><strong>Security Level:</strong> ${data.security_level.toUpperCase()}</p>
+                </div>
+                
+                <div class="network-info">
+                    <h4>📶 Network Information</h4>
+                    <p><strong>SSID:</strong> ${data.network.ssid}</p>
+                    <p><strong>BSSID:</strong> ${data.network.bssid}</p>
+                    <p><strong>Authentication:</strong> ${data.network.authentication}</p>
+                    <p><strong>Cipher:</strong> ${data.network.cipher}</p>
+                    <p><strong>Signal:</strong> ${data.network.signal_percent}% (${data.network.signal_dbm} dBm)</p>
+                    <p><strong>Channel:</strong> ${data.network.channel}</p>
+                </div>
+                
+                <h4>🔍 Detailed Security Checks:</h4>
+            `;
+            
+            // Encryption Check Details
+            if (data.checks && data.checks.encryption) {
+                const enc = data.checks.encryption;
+                const encIcon = enc.is_secure ? '✅' : '❌';
+                const encClass = enc.is_secure ? 'status-safe' : 'status-danger';
+                
+                html += `
+                    <div class="status-box ${encClass}" style="margin: 10px 0;">
+                        <strong>${encIcon} Check 1: Encryption Security</strong><br>
+                        <small>Encryption Type: ${enc.encryption_level || 'Unknown'}</small><br>
+                        <small>Status: ${enc.is_secure ? 'SECURE ✅' : 'VULNERABLE ❌'}</small>
+                `;
+                
+                if (enc.issues && enc.issues.length > 0) {
+                    html += '<br><br><strong>Issues Found:</strong><ul style="margin: 5px 0; padding-left: 20px;">';
+                    enc.issues.forEach(issue => {
+                        html += `<li>${issue}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                
+                if (enc.recommendations && enc.recommendations.length > 0) {
+                    html += '<br><strong>Recommendations:</strong><ul style="margin: 5px 0; padding-left: 20px;">';
+                    enc.recommendations.forEach(rec => {
+                        html += `<li>${rec}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                
+                html += '</div>';
+            }
+            
+            // Evil Twin Check Details
+            if (data.checks && data.checks.evil_twin) {
+                const et = data.checks.evil_twin;
+                const etIcon = et.has_indicators ? '⚠️' : '✅';
+                const etClass = et.has_indicators ? 'status-warning' : 'status-safe';
+                
+                html += `
+                    <div class="status-box ${etClass}" style="margin: 10px 0;">
+                        <strong>${etIcon} Check 2: Evil Twin / Rogue AP Detection</strong><br>
+                        <small>Risk Score from this check: ${et.risk_score}/100</small><br>
+                        <small>Status: ${et.has_indicators ? 'SUSPICIOUS ⚠️' : 'CLEAN ✅'}</small>
+                `;
+                
+                if (et.issues && et.issues.length > 0) {
+                    html += '<br><br><strong>Findings:</strong><ul style="margin: 5px 0; padding-left: 20px;">';
+                    et.issues.forEach(issue => {
+                        html += `<li>${issue}</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<br><br>✅ No evil twin indicators detected';
+                }
+                
+                html += '</div>';
+            }
+            
+            // DNS Check Details
+            if (data.checks && data.checks.dns) {
+                const dns = data.checks.dns;
+                const dnsIcon = dns.suspicious_dns ? '⚠️' : '✅';
+                const dnsClass = dns.suspicious_dns ? 'status-warning' : 'status-safe';
+                
+                html += `
+                    <div class="status-box ${dnsClass}" style="margin: 10px 0;">
+                        <strong>${dnsIcon} Check 3: DNS Security</strong><br>
+                        <small>Risk Score from this check: ${dns.risk_score}/100</small><br>
+                        <small>Status: ${dns.suspicious_dns ? 'SUSPICIOUS ⚠️' : 'NORMAL ✅'}</small>
+                `;
+                
+                if (dns.issues && dns.issues.length > 0) {
+                    html += '<br><br><strong>DNS Concerns:</strong><ul style="margin: 5px 0; padding-left: 20px;">';
+                    dns.issues.forEach(issue => {
+                        html += `<li>${issue}</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<br><br>✅ DNS configuration looks normal';
+                }
+                
+                html += '</div>';
+            }
+            
+            // Summary of all issues
+            if (data.all_issues && data.all_issues.length > 0) {
+                html += '<h4>⚠️ All Security Issues Found:</h4><ul class="issue-list">';
+                data.all_issues.forEach(issue => {
+                    html += `<li>${issue}</li>`;
+                });
+                html += '</ul>';
+            } else {
+                html += '<div class="status-box status-safe"><strong>✅ No security issues found!</strong></div>';
+            }
+            
+            // Recommendations
+            if (data.recommendations && data.recommendations.length > 0) {
+                html += '<h4>💡 Security Recommendations:</h4><ul class="issue-list">';
+                data.recommendations.forEach(rec => {
+                    html += `<li style="background: #d4edda; border-left-color: #28a745;">${rec}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ Check complete! See detailed results below.</p>';
+        }
+        
+        async function scanAvailableNetworks() {
+            showLoading('wifiCheckResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/connection/available`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showError('wifiCheckResult', data.error || 'Scan failed');
+                    return;
+                }
+                
+                displayAvailableNetworks(data.networks);
+            } catch (error) {
+                showError('wifiCheckResult', error.message);
+            }
+        }
+        
+        function displayAvailableNetworks(networks) {
+            const resultEl = document.getElementById('wifiCheckResult');
+            const mainEl = document.getElementById('mainResults');
+            
+            let html = `<h3>📡 Found ${networks.length} WiFi Networks</h3>`;
+            
+            if (networks.length === 0) {
+                html += '<p>No networks found. Make sure WiFi is enabled.</p>';
+            } else {
+                networks.forEach(net => {
+                    const secureClass = net.is_secure ? 'network-secure' : 'network-insecure';
+                    const badge = net.is_secure 
+                        ? '<span class="badge badge-safe">✅ SAFE</span>' 
+                        : '<span class="badge badge-unsafe">🔴 UNSAFE</span>';
+                    
+                    html += `
+                        <div class="available-network ${secureClass}" style="padding: 20px; margin: 15px 0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <strong style="font-size: 18px;">${net.ssid}</strong>
+                                ${badge}
+                            </div>
+                            
+                            <div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                <strong>🔍 Security Analysis:</strong><br><br>
+                                
+                                ${getNetworkSecurityAnalysis(net)}
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; font-size: 14px;">
+                                <div><strong>BSSID:</strong> ${net.bssid || 'N/A'}</div>
+                                <div><strong>Signal:</strong> ${net.signal_percent}%</div>
+                                <div><strong>Channel:</strong> ${net.channel || 'N/A'}</div>
+                                <div><strong>Risk Score:</strong> ${net.risk_score || 0}/100</div>
+                            </div>
+                            
+                            ${net.risk_score ? `
+                                <div class="progress-bar" style="margin-top: 10px;">
+                                    <div class="progress-fill" style="width: ${net.risk_score}%; background: ${net.risk_score >= 60 ? 'linear-gradient(90deg, #dc3545 0%, #f12711 100%)' : net.risk_score >= 30 ? 'linear-gradient(90deg, #ffc107 0%, #ff9800 100%)' : 'linear-gradient(90deg, #28a745 0%, #20c997 100%)'}"></div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ Scan complete!</p>';
+        }
+        
+        function getNetworkSecurityAnalysis(net) {
+            let analysis = '';
+            
+            // Encryption Check
+            if (net.authentication.includes('WPA3')) {
+                analysis += '✅ <strong>Encryption:</strong> WPA3 (Most Secure - Latest Standard)<br>';
+            } else if (net.authentication.includes('WPA2')) {
+                analysis += '✅ <strong>Encryption:</strong> WPA2 (Secure - Industry Standard)<br>';
+            } else if (net.authentication.includes('WPA') && !net.authentication.includes('WPA2')) {
+                analysis += '⚠️ <strong>Encryption:</strong> WPA only (Weak - Outdated, Vulnerable)<br>';
+            } else if (net.authentication.includes('WEP')) {
+                analysis += '❌ <strong>Encryption:</strong> WEP (Very Weak - Can be Cracked in Minutes!)<br>';
+            } else if (net.authentication.includes('Open')) {
+                analysis += '❌ <strong>Encryption:</strong> NONE - Open Network (Everything Visible!)<br>';
+            } else {
+                analysis += `⚠️ <strong>Encryption:</strong> ${net.authentication}<br>`;
+            }
+            
+            // Signal Strength Check
+            if (net.signal_percent >= 70) {
+                analysis += '✅ <strong>Signal Strength:</strong> Strong (Good Connection)<br>';
+            } else if (net.signal_percent >= 40) {
+                analysis += '⚠️ <strong>Signal Strength:</strong> Medium (Acceptable)<br>';
+            } else {
+                analysis += '❌ <strong>Signal Strength:</strong> Weak (Poor Connection)<br>';
+            }
+            
+            // Overall Safety Verdict
+            analysis += '<br>';
+            if (net.is_secure && net.signal_percent >= 40) {
+                analysis += '✅ <strong>Overall:</strong> <span style="color: #28a745; font-weight: bold;">SAFE TO CONNECT</span><br>';
+                analysis += '<small>This network uses strong encryption and has good signal.</small>';
+            } else if (!net.is_secure && net.authentication.includes('Open')) {
+                analysis += '❌ <strong>Overall:</strong> <span style="color: #dc3545; font-weight: bold;">DANGEROUS - DO NOT CONNECT!</span><br>';
+                analysis += '<small>Open networks expose ALL your data. Anyone can see what you do!</small>';
+            } else if (!net.is_secure) {
+                analysis += '⚠️ <strong>Overall:</strong> <span style="color: #ffc107; font-weight: bold;">NOT RECOMMENDED</span><br>';
+                analysis += '<small>This network uses weak or outdated encryption.</small>';
+            } else {
+                analysis += '⚠️ <strong>Overall:</strong> <span style="color: #ffc107; font-weight: bold;">USE WITH CAUTION</span><br>';
+                analysis += '<small>Network is secure but signal is weak.</small>';
+            }
+            
+            return analysis;
+        }
+        
+        async function scanMyNetwork() {
+            showLoading('monitorResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/scan`, {
+                    method: 'POST',
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showError('monitorResult', data.error || 'Scan failed');
+                    return;
+                }
+                
+                displayMonitoringResults(data);
+            } catch (error) {
+                showError('monitorResult', error.message);
+            }
+        }
+        
+        function displayMonitoringResults(data) {
+            const resultEl = document.getElementById('monitorResult');
+            const mainEl = document.getElementById('mainResults');
+            
+            const statusClass = data.security_status === 'good' ? 'status-safe' : 
+                               data.security_status === 'warning' ? 'status-warning' : 'status-danger';
+            
+            let html = `
+                <div class="status-box ${statusClass}">
+                    <h3>${data.alert_level} ${data.verdict}</h3>
+                    <p><strong>Risk Score:</strong> ${data.risk_score}/100</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${data.risk_score}%; background: ${data.risk_score >= 60 ? 'linear-gradient(90deg, #dc3545 0%, #f12711 100%)' : data.risk_score >= 30 ? 'linear-gradient(90deg, #ffc107 0%, #ff9800 100%)' : 'linear-gradient(90deg, #28a745 0%, #20c997 100%)'}"></div>
+                    </div>
+                </div>
+                
+                <div class="network-info">
+                    <h4>📊 Network Summary</h4>
+                    <p><strong>Total Devices:</strong> ${data.summary.total_devices}</p>
+                    <p><strong>Safe Devices:</strong> ${data.summary.safe_devices} ✅</p>
+                    <p><strong>Suspicious Devices:</strong> ${data.summary.suspicious_devices} ⚠️</p>
+                    <p><strong>Unknown Devices:</strong> ${data.summary.unknown_devices} ❓</p>
+                </div>
+                
+                <h4>🔍 Device Analysis Details:</h4>
+            `;
+            
+            // Show all devices with detailed checks
+            if (data.devices) {
+                // Suspicious devices first
+                if (data.devices.suspicious && data.devices.suspicious.length > 0) {
+                    html += '<div style="margin: 15px 0;"><strong style="color: #dc3545;">🔴 SUSPICIOUS DEVICES:</strong></div>';
+                    data.devices.suspicious.forEach(device => {
+                        html += getDeviceCard(device, 'suspicious');
+                    });
+                }
+                
+                // Unknown devices
+                if (data.devices.unknown && data.devices.unknown.length > 0) {
+                    html += '<div style="margin: 15px 0;"><strong style="color: #ffc107;">❓ UNKNOWN DEVICES:</strong></div>';
+                    data.devices.unknown.forEach(device => {
+                        html += getDeviceCard(device, 'unknown');
+                    });
+                }
+                
+                // Safe devices
+                if (data.devices.safe && data.devices.safe.length > 0) {
+                    html += '<div style="margin: 15px 0;"><strong style="color: #28a745;">✅ SAFE DEVICES:</strong></div>';
+                    data.devices.safe.forEach(device => {
+                        html += getDeviceCard(device, 'safe');
+                    });
+                }
+            }
+            
+            if (data.issues && data.issues.length > 0) {
+                html += '<h4>⚠️ Security Issues Found:</h4><ul class="issue-list">';
+                data.issues.forEach(issue => {
+                    html += `<li>${issue}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            if (data.recommendations && data.recommendations.length > 0) {
+                html += '<h4>💡 Recommendations:</h4><ul class="issue-list">';
+                data.recommendations.forEach(rec => {
+                    html += `<li style="background: #d4edda; border-left-color: #28a745;">${rec}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ Scan complete!</p>';
+        }
+        
+        function getDeviceCard(device, type) {
+            const typeConfig = {
+                'suspicious': {
+                    icon: '🔴',
+                    class: 'status-danger',
+                    color: '#dc3545'
+                },
+                'unknown': {
+                    icon: '❓',
+                    class: 'status-warning',
+                    color: '#ffc107'
+                },
+                'safe': {
+                    icon: '✅',
+                    class: 'status-safe',
+                    color: '#28a745'
+                }
+            };
+            
+            const config = typeConfig[type] || typeConfig['unknown'];
+            
+            let checks = `
+                <div class="status-box ${config.class}" style="margin: 10px 0; padding: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong style="font-size: 16px;">${config.icon} ${device.device_name || 'Unknown Device'}</strong>
+                        <span style="background: ${config.color}; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">
+                            ${type.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <strong>🔍 Security Checks Performed:</strong><br><br>
+                        
+                        <strong>1. IP Address Check:</strong><br>
+                        ${device.ip_address ? `✅ IP: ${device.ip_address}` : '❌ No IP detected'}<br><br>
+                        
+                        <strong>2. MAC Address Check:</strong><br>
+                        ${device.mac_address ? `✅ MAC: ${device.mac_address}` : '❌ No MAC detected'}<br><br>
+                        
+                        <strong>3. Vendor Identification:</strong><br>
+                        ${device.vendor && device.vendor !== 'Unknown' ? `✅ Vendor: ${device.vendor}` : '⚠️ Vendor: Unknown (Could not identify manufacturer)'}<br><br>
+                        
+                        <strong>4. Device Type Detection:</strong><br>
+                        ${device.device_type && device.device_type !== 'Unknown' ? `✅ Type: ${device.device_type}` : '⚠️ Type: Unknown (Could not determine device type)'}<br><br>
+                        
+                        <strong>5. Hostname Resolution:</strong><br>
+                        ${device.hostname && device.hostname !== 'Unknown' ? `✅ Hostname: ${device.hostname}` : '⚠️ No hostname found'}<br><br>
+                        
+                        <strong>6. Behavior Analysis:</strong><br>
+                        ${getDeviceBehaviorAnalysis(device)}<br><br>
+                        
+                        <strong>7. Security Status:</strong><br>
+                        ${getDeviceSecurityStatus(device, type)}
+                    </div>
+                </div>
+            `;
+            
+            return checks;
+        }
+        
+        function getDeviceBehaviorAnalysis(device) {
+            let behavior = '';
+            
+            if (device.is_gateway) {
+                behavior += '✅ This is your router/gateway (Expected)';
+            } else if (device.suspicious_activity) {
+                behavior += '❌ SUSPICIOUS ACTIVITY DETECTED!<br>';
+                behavior += '<small>This device is behaving abnormally</small>';
+            } else if (device.is_new) {
+                behavior += '⚠️ NEW device (First time seen on network)';
+            } else {
+                behavior += '✅ Normal behavior detected';
+            }
+            
+            return behavior;
+        }
+        
+        function getDeviceSecurityStatus(device, type) {
+            if (type === 'suspicious') {
+                let reasons = [];
+                if (!device.vendor || device.vendor === 'Unknown') {
+                    reasons.push('Unknown manufacturer');
+                }
+                if (device.suspicious_activity) {
+                    reasons.push('Abnormal behavior detected');
+                }
+                if (device.is_new) {
+                    reasons.push('New/unauthorized device');
+                }
+                
+                return `<span style="color: #dc3545; font-weight: bold;">⚠️ REQUIRES ATTENTION</span><br>
+                        <small>Reasons: ${reasons.join(', ')}</small>`;
+            } else if (type === 'unknown') {
+                return `<span style="color: #ffc107; font-weight: bold;">⚠️ VERIFY THIS DEVICE</span><br>
+                        <small>Cannot identify this device. Make sure it's yours.</small>`;
+            } else {
+                return `<span style="color: #28a745; font-weight: bold;">✅ DEVICE IS SAFE</span><br>
+                        <small>This device is recognized and behaving normally.</small>`;
+            }
+        }
+        
+        async function viewDevices() {
+            showLoading('monitorResult');
+            document.getElementById('resultsCard').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/devices`, {
+                    headers: headers
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showError('monitorResult', data.error || 'Failed to get devices');
+                    return;
+                }
+                
+                displayDeviceList(data.devices);
+            } catch (error) {
+                showError('monitorResult', error.message);
+            }
+        }
+        
+        function displayDeviceList(devices) {
+            const resultEl = document.getElementById('monitorResult');
+            const mainEl = document.getElementById('mainResults');
+            
+            let html = `<h3>📱 Connected Devices (${devices.length})</h3>`;
+            
+            if (devices.length === 0) {
+                html += '<p>No devices found on network.</p>';
+            } else {
+                devices.forEach(device => {
+                    const icon = device.is_router ? '📡' : 
+                                device.device_type === 'smartphone' ? '📱' :
+                                device.device_type === 'computer' ? '💻' : '🔷';
+                    
+                    html += `
+                        <div class="device-card">
+                            ${icon} <strong>${device.device_name}</strong><br>
+                            <small>
+                                IP: ${device.ip_address} | MAC: ${device.mac_address}<br>
+                                Vendor: ${device.vendor} | Type: ${device.device_type}
+                            </small>
+                        </div>
+                    `;
+                });
+            }
+            
+            mainEl.innerHTML = html;
+            resultEl.innerHTML = '<p style="color: #28a745; margin-top: 10px;">✅ Device list loaded!</p>';
+        }
+    </script>
+</body>
+</html>
