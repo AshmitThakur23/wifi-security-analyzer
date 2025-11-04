@@ -1,68 +1,374 @@
-# 🛡️ WiFi Security Analyzer - Real-World Version
+<div align="center">
 
-## 🎯 What This Tool Does
+# 🛡️ WiFi Security Analyzer
 
-This is a **REAL** WiFi security analyzer that works with your actual WiFi networks in Windows. It has two main features:
+### *Your Personal Network Security Guardian*
 
-### ✅ Feature 1: Check WiFi Safety Before/While Connecting
-- **Scan all WiFi networks** in your area (4, 5, or more networks)
-- **Analyze security** of each network (WPA3, WPA2, WEP, Open, etc.)
-- **Check if network is safe** before you connect
-- **Detect potential threats**: Evil Twin attacks, weak encryption, suspicious DNS
-- **Get recommendations** on whether it's safe to connect
+[![Made with Python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.1.2-000000?logo=flask)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Windows](https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows)](https://www.microsoft.com/windows)
+[![GitHub](https://img.shields.io/badge/GitHub-AshmitThakur23-181717?logo=github)](https://github.com/AshmitThakur23/wifi-security-analyzer)
 
-### ✅ Feature 2: Monitor Your Home WiFi
-- **Scan all devices** connected to YOUR WiFi network
-- **Detect unauthorized devices** (guests, hackers, unknown devices)
-- **Identify each device** (phones, computers, smart TVs, etc.)
-- **Get alerts** when suspicious activity is detected
-- **Monitor in real-time** who is using your WiFi
-- **Protect your personal data** from WiFi thieves
+<img src="https://raw.githubusercontent.com/abhisheknaiidu/abhisheknaiidu/master/code.gif" width="500" alt="Coding">
+
+*Protect yourself from WiFi hackers, Evil Twin attacks, and unauthorized network access*
+
+[Features](#-features) • [Quick Start](#-quick-start) • [How It Works](#-how-it-works) • [Documentation](#-documentation) • [Screenshots](#-screenshots)
+
+</div>
 
 ---
 
-## 🚀 Quick Start (EASIEST WAY)
+## 📊 Project Overview
 
-### Option 1: Use the Batch Files (Windows)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│  🏠 HOME WIFI              🔍 ANALYZE              ✅ SECURE    │
+│                                                                 │
+│  ┌──────────┐            ┌──────────┐            ┌──────────┐  │
+│  │ Router   │  ------→   │ Security │  ------→   │ Protected│  │
+│  │ Devices  │            │ Scan     │            │ Network  │  │
+│  └──────────┘            └──────────┘            └──────────┘  │
+│                                                                 │
+│  • Check WiFi Safety     • Evil Twin Detection  • Real-time    │
+│  • Scan Devices          • Encryption Analysis  • Monitoring   │
+│  • Identify Threats      • DNS Security Check   • Alerts       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-1. **Start Server**: Double-click `START_SERVER.bat`
-2. **Open Frontend**: Double-click `OPEN_FRONTEND.bat`
-3. That's it! The app will open in your browser.
+## 🎯 What This Tool Does
 
-### Option 2: Manual Start
+This is a **REAL** WiFi security analyzer designed for **Windows** that works with your actual WiFi networks. It provides two powerful security features to protect your network from hackers and unauthorized access.
 
-**Step 1: Install Dependencies**
+### ✅ Feature 1: WiFi Security Analysis
+```
+📡 YOUR AREA NETWORKS          →    🔍 SECURITY CHECK    →    📊 DETAILED REPORT
+┌─────────────────┐                 ┌────────────────┐         ┌──────────────────┐
+│ • Home WiFi     │                 │ ✓ Encryption   │         │ ✅ WPA2 - Safe   │
+│ • Coffee Shop   │   ────────→     │ ✓ Evil Twin    │   →     │ ⚠️ WEP - Unsafe  │
+│ • Office WiFi   │                 │ ✓ DNS Check    │         │ ❌ Open - Danger │
+│ • Guest Network │                 └────────────────┘         └──────────────────┘
+└─────────────────┘
+```
 
-Open PowerShell in the `backend` folder and run:
+**Capabilities:**
+- 🔐 **Encryption Analysis** - Identifies WPA3, WPA2, WPA, WEP, or Open networks
+- 👥 **Evil Twin Detection** - Detects fake WiFi hotspots trying to steal your data
+- 🌐 **DNS Security Check** - Verifies DNS isn't hijacked to redirect you to malicious sites
+- 📊 **Risk Scoring** - Provides 0-100 risk score with detailed explanations
+- 💡 **Smart Recommendations** - Tells you exactly what to do
 
-```powershell
+### ✅ Feature 2: Network Device Monitoring
+```
+🏠 YOUR HOME NETWORK                 🔍 DEVICE SCAN                 🚨 THREAT DETECTION
+┌──────────────────┐                ┌───────────────┐              ┌─────────────────┐
+│ Router           │                │ Scan ARP      │              │ Known Devices ✅│
+│ ├─ Phone        │                │ Table for     │              │ Unknown Devices❓│
+│ ├─ Laptop       │   ────────→    │ Connected     │   ────────→  │ Suspicious    ⚠️│
+│ ├─ Smart TV     │                │ Devices       │              │ ALERT!        🔴│
+│ └─ ??? Device   │                └───────────────┘              └─────────────────┘
+└──────────────────┘
+```
+
+**Capabilities:**
+- 📱 **Device Discovery** - Finds ALL devices connected to your WiFi
+- 🏷️ **Vendor Identification** - Identifies device manufacturers (Apple, Samsung, etc.)
+- 🔍 **Device Classification** - Categorizes as phone, computer, TV, IoT device
+- ⚡ **Real-time Monitoring** - 24/7 continuous monitoring with ON/OFF toggle
+- 🚨 **Instant Alerts** - Notifies you when unknown devices connect
+- 📊 **Historical Tracking** - See who connected and when
+
+---
+
+## 🚀 Quick Start
+
+### 🎬 One-Click Launch (Easiest Method)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  1️⃣  Double-click START_SERVER.bat                         │
+│      └──→ ✅ Installs dependencies                         │
+│      └──→ ✅ Starts Flask server                           │
+│      └──→ ✅ Opens frontend automatically                  │
+│                                                             │
+│  2️⃣  Browser opens with the app running                    │
+│      └──→ ✅ Ready to use immediately!                     │
+│                                                             │
+│  That's it! Everything works with ONE CLICK! 🎉            │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 📋 Manual Installation
+
+<details>
+<summary><b>Click to expand manual installation steps</b></summary>
+
+#### Prerequisites
+- ✅ Python 3.8 or higher
+- ✅ Windows OS (7/8/10/11)
+- ✅ Administrator privileges (for network scanning)
+
+#### Step 1: Clone the Repository
+```bash
+git clone https://github.com/AshmitThakur23/wifi-security-analyzer.git
+cd wifi-security-analyzer
+```
+
+#### Step 2: Install Dependencies
+```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-**Step 2: Start the Backend Server**
-
-```powershell
+#### Step 3: Start the Server
+```bash
 python app.py
 ```
 
 You should see:
 ```
 ============================================================
-🛡️  WiFi Security Analyzer v2.0
+🛡️  WiFi Security Analyzer v2.0 - ENHANCED
 ============================================================
 ✅ Feature 1: Check if current WiFi is safe
 ✅ Feature 2: Monitor your WiFi for intruders
+🆕 Feature 3: 24/7 Continuous Monitoring (ON/OFF)
+🆕 Feature 4: Historical analysis - See past activity
+🆕 Feature 5: Works on ANY WiFi (home, office, anywhere)
 ============================================================
-🌐 Server: http://0.0.0.0:5000
+🌐 Server: http://127.0.0.1:5000
 ============================================================
 ```
 
-**Step 3: Open the Frontend**
+#### Step 4: Open the Frontend
+- Right-click `frontend/index.html`
+- Choose "Open with Chrome" or "Open with Edge"
+- Or simply open the file in any modern browser
 
-Right-click `frontend\index.html` and choose "Open with Chrome" or "Open with Edge"
+</details>
 
-Or simply double-click `OPEN_FRONTEND.bat`
+---
+
+## 🏗️ Architecture & How It Works
+
+### System Architecture Diagram
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                         WIFI SECURITY ANALYZER                            │
+└───────────────────────────────────────────────────────────────────────────┘
+                                    │
+                ┌───────────────────┴───────────────────┐
+                │                                       │
+        ┌───────▼────────┐                    ┌────────▼────────┐
+        │   FRONTEND     │◄──── HTTP ────────►│    BACKEND      │
+        │  (Web UI)      │      REST API      │  (Flask Server) │
+        └────────────────┘                    └─────────────────┘
+        │                                              │
+        │  • HTML/CSS/JS                               │  • Python Flask
+        │  • Interactive UI                            │  • SQLite Database
+        │  • Real-time Updates                         │  • RESTful APIs
+        │                                              │
+        └───────────────────┐                          │
+                            │                          │
+                    ┌───────▼──────────────────────────▼──────────┐
+                    │         SECURITY ANALYSIS ENGINE           │
+                    └───────────────┬────────────────────────────┘
+                                    │
+            ┌───────────────────────┼───────────────────────┐
+            │                       │                       │
+    ┌───────▼────────┐    ┌────────▼────────┐    ┌────────▼────────┐
+    │ CONNECTION     │    │  MONITORING     │    │  CONTINUOUS     │
+    │ SERVICE        │    │  SERVICE        │    │  MONITOR        │
+    └────────────────┘    └─────────────────┘    └─────────────────┘
+    │                     │                      │
+    │ • WiFi Scan         │ • ARP Scan          │ • Background Task
+    │ • Encryption        │ • Device Discovery  │ • Periodic Checks
+    │ • Evil Twin         │ • Vendor Lookup     │ • Alert System
+    │ • DNS Check         │ • Threat Detection  │ • History Logging
+    │                     │                      │
+    └──────┬──────────────┴──────────────────────┴──────────┐
+           │                                                 │
+    ┌──────▼─────────────────────────────────────────────────▼──────┐
+    │              WINDOWS NETWORK COMMANDS                         │
+    │  • netsh wlan show interfaces     (WiFi info)                 │
+    │  • netsh wlan show networks       (Available networks)        │
+    │  • arp -a                          (Connected devices)         │
+    │  • ipconfig                        (Network configuration)     │
+    │  • nslookup                        (DNS queries)               │
+    └───────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow Diagram
+
+```
+USER ACTION                 BACKEND PROCESSING              RESULT DISPLAY
+┌──────────────┐           ┌───────────────────┐          ┌──────────────┐
+│ Click Button │           │ 1. Receive Request│          │ Show Detailed│
+│  "Check      │  ──────►  │ 2. Execute Scan   │  ─────►  │ Security     │
+│   WiFi"      │           │ 3. Analyze Data   │          │ Report       │
+└──────────────┘           │ 4. Calculate Risk │          └──────────────┘
+                           │ 5. Generate Report│
+                           └───────────────────┘
+                                    │
+                           ┌────────┴────────┐
+                           │                 │
+                    ┌──────▼──────┐   ┌─────▼──────┐
+                    │ Save to DB  │   │ Send JSON  │
+                    │ (SQLite)    │   │ Response   │
+                    └─────────────┘   └────────────┘
+```
+
+### Security Check Flow
+
+```
+WIFI NETWORK → CHECK #1 → CHECK #2 → CHECK #3 → RISK CALCULATION → VERDICT
+               ────────   ────────   ────────   ───────────────   ────────
+               Encryption  Evil Twin  DNS       Sum of all       Safe/
+               WPA3/2/WEP  Detection  Security  risk scores      Unsafe
+               ✅/⚠️/❌     ✅/⚠️/❌      ✅/⚠️/❌    0-100 points      + Tips
+```
+
+---
+
+## 🔍 Detailed Features
+
+### 🛡️ Feature 1: WiFi Security Analysis
+
+#### What Gets Checked:
+
+<table>
+<tr>
+<td width="33%">
+
+**🔐 Encryption Check**
+```
+WPA3 ━━━━━━━━━━ ✅ 100%
+     (Most Secure)
+
+WPA2 ━━━━━━━━━━ ✅ 90%
+     (Secure)
+
+WPA  ━━━━━━     ⚠️ 60%
+     (Weak)
+
+WEP  ━━         ❌ 30%
+     (Very Weak)
+
+OPEN             ❌ 0%
+     (No Security)
+```
+
+</td>
+<td width="33%">
+
+**👥 Evil Twin Detection**
+```
+┌─────────────┐
+│ Real Router │
+│ "HomeWiFi"  │
+└─────────────┘
+       ✅
+       
+┌─────────────┐
+│ Fake Router │
+│ "HomeWiFi"  │ ⚠️ ALERT!
+└─────────────┘
+  (Same SSID,
+   Different MAC)
+```
+
+</td>
+<td width="33%">
+
+**🌐 DNS Security**
+```
+Normal DNS:
+8.8.8.8 ━━━━━━ ✅
+(Google DNS)
+
+1.1.1.1 ━━━━━━ ✅
+(Cloudflare)
+
+Suspicious:
+192.168.x.x ━━ ⚠️
+(Local/Unknown)
+
+Hijacked:
+Unknown IP ━━━ ❌
+(Malicious DNS)
+```
+
+</td>
+</tr>
+</table>
+
+#### Risk Score Calculation:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  RISK SCORE = Encryption (50%) + Evil Twin (30%)       │
+│               + DNS Security (20%)                      │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │  0-29   │ 🟢 LOW RISK      │ ✅ Safe to Connect │  │
+│  │  30-59  │ 🟡 MEDIUM RISK   │ ⚠️ Use with Caution│  │
+│  │  60-100 │ 🔴 HIGH RISK     │ ❌ Do NOT Connect │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 🏠 Feature 2: Network Device Monitoring
+
+#### Device Detection Process:
+
+```
+STEP 1: ARP SCAN          STEP 2: ANALYSIS         STEP 3: CLASSIFICATION
+┌────────────────┐        ┌─────────────────┐      ┌──────────────────┐
+│ Run: arp -a    │   →    │ For each device:│  →   │ Device Type:     │
+│                │        │ • Get IP        │      │ • Smartphone     │
+│ Returns:       │        │ • Get MAC       │      │ • Computer       │
+│ IP  │  MAC     │        │ • Vendor Lookup │      │ • Smart TV       │
+│ x.x.x.1 │ AA:  │        │ • Hostname      │      │ • IoT Device     │
+│ x.x.x.2 │ BB:  │        │ • Type Detect   │      │ • Router         │
+│ x.x.x.3 │ CC:  │        └─────────────────┘      │ • Unknown        │
+└────────────────┘                                 └──────────────────┘
+```
+
+#### 7-Point Security Check Per Device:
+
+```
+FOR EACH DEVICE:
+├─ ✅ CHECK 1: IP Address Detection
+├─ ✅ CHECK 2: MAC Address Verification  
+├─ ✅ CHECK 3: Vendor Identification (40,000+ database)
+├─ ✅ CHECK 4: Device Type Classification
+├─ ✅ CHECK 5: Hostname Resolution
+├─ ✅ CHECK 6: Behavior Analysis (New? Suspicious?)
+└─ ✅ CHECK 7: Risk Assessment (Safe/Unknown/Suspicious)
+```
+
+### ⏰ Feature 3: 24/7 Continuous Monitoring
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  🟢 MONITORING ON                                        │
+│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐        │
+│  │ Scan 1 │→ │ Scan 2 │→ │ Scan 3 │→ │ Scan 4 │→  ...  │
+│  └────────┘  └────────┘  └────────┘  └────────┘        │
+│   Every 5 minutes (configurable)                        │
+│                                                          │
+│  If new device detected:                                │
+│  └─→ 🚨 ALERT TRIGGERED                                 │
+│      └─→ 📧 Save to database                            │
+│          └─→ 📊 Show in history                         │
+└──────────────────────────────────────────────────────────┘
+```
 
 ### Step 3: Open the Frontend
 
@@ -493,3 +799,157 @@ Feel free to improve this tool! Focus areas:
 **Made with ❤️ for WiFi Security**
 
 Stay safe online! 🛡️🔒
+
+
+---
+
+##  Screenshots
+
+### Main Dashboard
+```
+
+               WiFi Security Analyzer v2.0                   
+                                                                
+              
+    Server Connected    10.165.13.234                     
+              
+                                                                
+              
+    Feature 1: Check Current WiFi                        
+   Check if the WiFi you're connected to is                
+   safe from hackers                                        
+                                                            
+    [  Check My WiFi Now  ]  [ Scan Networks ]             
+              
+                                                                
+              
+    Feature 2: Monitor My Network                        
+   Detect unauthorized devices and suspicious              
+   activity on your WiFi                                    
+                                                            
+    [   START Monitoring   ]   24/7                      
+    [ Quick Scan Now ] [ View All Devices ]                
+              
+
+```
+
+---
+
+##  Documentation
+
+### Complete Feature List
+ WiFi encryption analysis (WPA3/WPA2/WPA/WEP/Open)
+ Evil Twin attack detection
+ DNS hijacking detection
+ Network device discovery
+ Device vendor identification (40,000+ manufacturers)
+ Device type classification
+ 24/7 continuous monitoring
+ Real-time alerts
+ Historical tracking
+ Weekly reports
+ Risk scoring algorithm
+ Beautiful web interface
+ RESTful API
+ SQLite database
+ One-click launcher
+
+---
+
+##  Contributing
+
+Contributions are welcome! Here's how:
+
+```bash
+# Fork the repository
+# Create a new branch
+git checkout -b feature/amazing-feature
+
+# Make your changes
+# Commit your changes
+git commit -m 'Add amazing feature'
+
+# Push to your branch
+git push origin feature/amazing-feature
+
+# Open a Pull Request
+```
+
+---
+
+##  License
+
+This project is licensed under the MIT License - see below:
+
+```
+MIT License
+
+Copyright (c) 2025 Ashmit Thakur
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+##  Author
+
+**Ashmit Thakur**
+- GitHub: [@AshmitThakur23](https://github.com/AshmitThakur23)
+- Repository: [wifi-security-analyzer](https://github.com/AshmitThakur23/wifi-security-analyzer)
+
+---
+
+##  Acknowledgments
+
+- Built with  using Flask and Python
+- Inspired by the need for better WiFi security awareness
+- Thanks to the open-source community
+
+---
+
+##  Support
+
+If you encounter issues or have questions:
+
+1. **Check the [STATUS.md](STATUS.md)** file for quick troubleshooting
+2. **Open an issue** on GitHub with details
+3. **Read the documentation** above thoroughly
+
+---
+
+##  Star This Project!
+
+If you found this tool helpful, please give it a star  on GitHub!
+
+```bash
+# Star the repository
+https://github.com/AshmitThakur23/wifi-security-analyzer
+```
+
+---
+
+<div align="center">
+
+### Made with  by Ashmit Thakur
+
+**Protect Your Network. Stay Secure. **
+
+[ Back to Top](#%EF%B8%8F-wifi-security-analyzer)
+
+</div>
