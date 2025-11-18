@@ -61,6 +61,21 @@ This is a **REAL** WiFi security analyzer designed for **Windows** that works wi
 - 📊 **Risk Scoring** - Provides 0-100 risk score with detailed explanations
 - 💡 **Smart Recommendations** - Tells you exactly what to do
 
+
+## 📘 Technical Concepts Explained
+
+• WPA3 – Latest and strongest WiFi encryption  
+• WPA2 – Standard encryption, still safe but not perfect  
+• WEP – Old and extremely weak, easily hackable  
+• Evil Twin Attack – Fake WiFi pretending to be real  
+• DNS Hijacking – Redirecting you to fake websites  
+• ARP Spoofing – Hacker pretending to be your router  
+• KRACK Attack – WPA2 key reinstallation attack  
+• SSL Stripping – HTTPS downgraded to HTTP  
+• Deauthentication Attack – Hacker forces you offline  
+• Captive Portal – Login page WiFi that can monitor traffic
+
+
 ### ✅ Feature 2: Network Device Monitoring
 ```
 🏠 YOUR HOME NETWORK                 🔍 DEVICE SCAN                 🚨 THREAT DETECTION
@@ -82,6 +97,21 @@ This is a **REAL** WiFi security analyzer designed for **Windows** that works wi
 - 📊 **Historical Tracking** - See who connected and when
 
 ---
+
+## 🔍 13 Device Security Checks (Full List)
+1. OS Detection  
+2. Hostname Verification  
+3. Suspicious Port Scan  
+4. MAC Spoof Detection  
+5. Behavior Analysis  
+6. Virtual Machine Detection  
+7. ARP Spoof Monitoring  
+8. IoT Vulnerability Check  
+9. Device Count Analysis  
+10. Rogue DHCP Detection  
+11. Guest Network Isolation  
+12. Bandwidth Monitoring  
+13. Port Scan Detection
 
 ## 🚀 Quick Start
 
